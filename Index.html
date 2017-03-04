@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<script type="text/javascript">
+
+
+	(function() {
+		var produtos = [];
+		var compras = [];
+		var vendas = [];
+
+		function criarProduto(codigoDoProduto,nomeDoProduto,precoDoProduto,estoqueDoProduto) {
+			return { codigo: codigoDoProduto, nome: nomeDoProduto, preco: precoDoProduto, estoque: estoqueDoProduto };
+		}
+
+		function cadastrarProduto(){
+			var codigo = prompt("Informe o Codigo: ");
+			var nome = prompt("Informe o Nome: ");
+			var preco = prompt("Informe o Preco: ");
+			var estoque = prompt("Informe o Estoque: ");
+			var novoProduto = criarProduto(codigo,nome,preco,estoque);
+			produtos.push(novoProduto);
+			apresentarMenu();
+		}
+
+		function gerarRelatorioDeProdutos(){
+			console.log(JSON.stringify(produtos, null, 2));
+			apresentarMenuRelatorio();
+		}
+
+		function criarCompra(codigoDoProduto, quantidade){
+			return { codigo: codigoDoProduto, quantidade: quantidade};
+		}
+
+		function cadastrarCompra(){
+			var codigo = prompt("Informe o Codigo: ");
+			var quantidade = prompt("Informe a quantidade: ");
+			var produtoLocalizado = false;
+
+			for (var i = 0; i < produtos.length; i++) {
+				if(produtos[i].codigo === codigo){
+					produtoLocalizado = true;
+					if(quantidade > 0){
+						produtos[i].estoque = parseInt(produtos[i].estoque) + parseInt(quantidade);
+						var novaCompra = criarCompra(codigo,quantidade);
+						compras.push(novaCompra);
+					}else{
+						prompt("Informe uma quantidade maior que zero!");
+					}
+				}
+			}
+			if(!produtoLocalizado){
+				prompt("Produto nao localizado!");
+			}
+			apresentarMenu();
+		}
+
+		function gerarRelatorioDeCompras(){
+			console.log(JSON.stringify(compras, null, 2));
+			apresentarMenuRelatorio();
+		}
+
+
+		function criarVenda(codigoDoProduto, quantidade){
+			return { codigo: codigoDoProduto, quantidade: quantidade};
+		}
+
+		function cadastrarVenda(){
+			var codigo = prompt("Informe o Codigo: ");
+			var quantidade = prompt("Informe a quantidade: ");
+			var produtoLocalizado = false;
+
+			for (var i = 0; i < produtos.length; i++) {
+				if(produtos[i].codigo === codigo){
+					produtoLocalizado = true;
+					if(quantidade > 0){
+						produtos[i].estoque = parseInt(produtos[i].estoque) - parseInt(quantidade);
+						var novaVenda = criarVenda(codigo,quantidade);
+						vendas.push(novaVenda);
+					}else{
+						prompt("Informe uma quantidade maior que zero!");
+					}
+				}
+			}
+			if(!produtoLocalizado){
+				prompt("Produto nao localizado!");
+			}
+			apresentarMenu();
+		}
+
+		function gerarRelatorioDeVendas(){
+			console.log(JSON.stringify(vendas, null, 2));
+			apresentarMenuRelatorio();
+		}
+
+		function apresentarMenuRelatorio(){
+			var opcao = parseInt(prompt("1. Produtos\n2. Compras\n3. Vendas\n0. Sair"));
+
+			switch(opcao) {
+			    case 1:
+			        gerarRelatorioDeProdutos();
+			        break;
+			    case 2:
+			        gerarRelatorioDeCompras();
+			        break;
+			    case 3:
+			    	gerarRelatorioDeVendas();
+					break;
+			    case 0:
+			    	alert("Você saiu do menu!");
+			    	apresentarMenu();
+			    	break;
+			    default:
+			        prompt("Opcao Invalida!");
+			}
+			opcao = 0;
+		}
+
+
+		function apresentarMenu(){
+			var opcaomenu = parseInt(prompt("1. Produto\n2. Compra\n3. Venda\n4. Relatorio\n0. Sair"));
+			console.log(opcaomenu);
+			switch(opcaomenu) {
+			    case 1:
+			        cadastrarProduto();
+			        break;
+			    case 2:
+			        cadastrarCompra();
+			        break;
+			    case 3:
+			    	cadastrarVenda();
+					break;
+			    case 4:
+			    	apresentarMenuRelatorio();
+					break;
+			    case 0:
+			    	alert("Você saiu do sistema!");
+			    	break;
+			    default:
+			        prompt("opcao Invalida!");
+			}
+
+			opcaomenu = 0;
+
+		}
+
+		apresentarMenu();
+
+	})();
+
+</script>
+<body>
+</body>
+
+</html>
